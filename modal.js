@@ -88,6 +88,10 @@ class Modal extends HTMLElement {
     
     cancelButton.addEventListener('click', this._cancel.bind(this));
     confirmButton.addEventListener('click', this._confirm.bind(this));
+
+    // cancelButton.addEventListener('cancel', () => {
+    //   console.log('cancel from componet');
+    // })
   }
 
 
@@ -115,12 +119,19 @@ class Modal extends HTMLElement {
     this.isOpen = false;
   }
 
-  _cancel() {
+  _cancel(event) {
     this.hide();
+    const cancelEvent = new Event('cancel', {bubbles: true, composed: true}); // composed = may leave shadowdom
+    event.target.dispatchEvent(cancelEvent);
   }
 
-  _confirm() {
-    this.hide()
+  // this event is on the modal because of this.dispatchEvent and not on the event as in cancel
+  // any code listening to events on the component outside of it can receive the dispatch
+  // the _cancel method could also be written this way
+  _confirm() { 
+    this.hide();
+    const confirmEvent = new Event('confirm');
+    this.dispatchEvent(confirmEvent);
   }
 }
 
