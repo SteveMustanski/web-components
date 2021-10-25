@@ -44,7 +44,7 @@ class Modal extends HTMLElement {
         padding: 1rem;
       }
 
-      header h1 {
+      ::slotted(h1) {
         font-sze: 1.25rem;
       }
 
@@ -66,17 +66,28 @@ class Modal extends HTMLElement {
     <div id="backdrop"></div>
     <div id="modal">
       <header>
-        <h1>Please Confirm</h1>
+        <slot name="title">Please Confirm</slot>
       </header>
       <section id="main">
         <slot></slot>
       </section>
       <section id="actions">
-        <button>Cancel</button>
-        <button>OK</button>
+        <button id="cancel-btn">Cancel</button>
+        <button id="confirm-btn">OK</button>
       </section>
     </div>
     `;
+
+    const slots = this.shadowRoot.querySelectorAll('slot');
+    slots[1].addEventListener('slotchange', event => {
+      console.dir(slots[1].assignedNodes());
+    });
+
+    const cancelButton = this.shadowRoot.querySelector('#cancel-btn');
+    const confirmButton = this.shadowRoot.querySelector('#confirm-btn');
+    
+    cancelButton.addEventListener('click', this._cancel.bind(this));
+    confirmButton.addEventListener('click', this._confirm.bind(this));
   }
 
 
@@ -95,6 +106,21 @@ class Modal extends HTMLElement {
 
   open() {
     this.setAttribute('opened', '');
+  }
+
+  hide() {
+    if (this.hasAttribute('opened')) {
+      this.removeAttribute('opened')
+    }
+    this.isOpen = false;
+  }
+
+  _cancel() {
+    this.hide();
+  }
+
+  _confirm() {
+    this.hide()
   }
 }
 

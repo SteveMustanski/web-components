@@ -19,6 +19,7 @@
 </head>
 <body>
   <sm-modal>
+    <h1 slot="title">Please Confirm Payment</h1>
     <p>Please confirm that you wish to pay the full amount.</p>
   </sm-modal>
   <p>Please confirm your choice.</p>
@@ -27,6 +28,15 @@
   <script>
     const confirmButton = document.querySelector('button');
     const modal = document.querySelector('sm-modal');
+
+    modal.addEventListener('confirm', () => {
+      console.log('Confirmed....')
+    })
+
+    modal.addEventListener('cancel', () => {
+      console.log('cancelled....')
+    })
+
     confirmButton.addEventListener('click', () => {
       if (!modal.isOpen) {
         modal.open();
