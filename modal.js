@@ -19,14 +19,18 @@ class Modal extends HTMLElement {
       }
 
       :host([opened]) #backdrop,
-      :host([opened]) #modal{
+      :host([opened]) #modal {
         opacity: 1;
         pointer-events: all;
       }
 
+      :host([opened]) #modal {
+        top: 15vh;
+      }
+
       #modal {
         position: fixed;
-        top: 15vh;
+        top: 10vh;
         left: 25%;
         width: 50%;
         z-index: 100;
@@ -38,14 +42,17 @@ class Modal extends HTMLElement {
         justify-content: space-between;
         opacity: 0;
         pointer-events: none;
+        transition: all 0.3s ease-out;
       }
 
       header {
         padding: 1rem;
+        border-bottom: 1px solid #ccc;
       }
 
       ::slotted(h1) {
         font-sze: 1.25rem;
+        margin: 0;
       }
 
       #main {
@@ -85,7 +92,9 @@ class Modal extends HTMLElement {
 
     const cancelButton = this.shadowRoot.querySelector('#cancel-btn');
     const confirmButton = this.shadowRoot.querySelector('#confirm-btn');
+    const backdrop = this.shadowRoot.querySelector('#backdrop');
     
+    backdrop.addEventListener('click', this._cancel.bind(this));
     cancelButton.addEventListener('click', this._cancel.bind(this));
     confirmButton.addEventListener('click', this._confirm.bind(this));
 
